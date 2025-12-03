@@ -128,6 +128,7 @@ virtualFolder:
         - path: User/Utils/ring_fifo/ring_fifo.c
         - path: User/Utils/my_math/my_math.c
         - path: User/Utils/pid/pid.c
+        - path: User/Modules/chassis_calculations/chassis_calculations.c
       folders: []
     - name: Modules
       files:

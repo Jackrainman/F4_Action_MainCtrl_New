@@ -24,6 +24,7 @@ extern "C" {
 #include "./beep/beep.h"
 #include "./DJI-Motor/dji_bldc_motor.h"
 #include "./can_list/can_list.h"
+#include "./chassis_calculations/chassis_calculations.h"
 
 void bsp_init(void);
 

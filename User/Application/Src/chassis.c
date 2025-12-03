@@ -84,8 +84,8 @@ enum {
 
 /* 固定点位+可变点位函数 */
 pos_node_t pos_array[POS_NUM + EX_NODE_NUM] = {
-    [0] = {-0.0f, 0.0f, 0.0f, POINT_TYPE_NUC_FLAT},
-    [1] = {2372.718f, 1389.255f, 61.265f, POINT_TYPE_NUC_FLAT},
+    [0] = {-0.0f, 0.0f, 0 .0f, POINT_TYPE_NUC_FLAT},
+    [1] = {4298.820f, -140.255f, 0.265f, POINT_TYPE_NUC_FLAT},
     [2] = {2960.288f, 3112.193f, 88.494f, POINT_TYPE_NUC_FLAT},
     [3] = {2494.616f, 5111.423f, 120.020f, POINT_TYPE_NUC_FLAT}, /*!< 点位信息 */
 
@@ -322,7 +322,7 @@ void chassis_remote_key(uint8_t key, remote_key_event_t key_event) {
         } break;
         case CHASSIS_SET_SELF: {
             sub_chassis_world_yaw(&self_yaw);
-        }
+        } break;
         default:
             break;
     }
@@ -484,31 +484,6 @@ void chassis_auto_ctrl_task(void *pvParameters) {
              0.01f, 0.5f);
     go_path_pidpoint_init(&action_flat_speed_pid, &action_flat_angle_pid, 20.0, 0.5,
                           POINT_TYPE_NUC_FLAT, LOCATION_TYPE_ACTION);
-    /* 跑环的pid*/
-    // pid_init(&radium_speed_pid, 500, 500 / 2, 0.0f, 50000.0f, POSITION_PID,
-    //          1.5f / 5.0f, 0.1f, 0.0f);
-    pid_init(&radium_speed_pid, 2000, 500, 0.0f, 50000.0f, POSITION_PID, 3.0f,
-             1.0f, 0.0f);
-    pid_init(&radium_angle_pid, 200, 8, 0.0f, 500.0f, POSITION_PID, 3.2 * 10.0f,
-             0.0f, 2.0 * 10.0f);
-    go_path_pidpoint_init(&radium_speed_pid, &radium_angle_pid, 20.0, 0.5,
-                          POINT_TYPE_TARGET_RADIUM, LOCATION_TYPE_ACTION);
-
-     /* 直线跑点的pid初始化 */
-    pid_init(&linear_speed_pid, 3000, 1000, 0.0f, 50000.0f, POSITION_PID,
-             1.5f, 0.1f, 0.0f);
-    pid_init(&linear_angle_pid, 500, 15, 0.0f, 180.0f, POSITION_PID, 7.0f,  // 直线跑点可能需要更高的角度响应
-             0.03f, 0.5f);
-    go_path_pidpoint_init(&linear_speed_pid, &linear_angle_pid, 20.0, 0.5,
-                          POINT_TYPE_LINEAR, LOCATION_TYPE_ACTION);
-
-     /* 顺序跑点的pid初始化 */
-    pid_init(&sequence_speed_pid, 2500, 800, 0.0f, 50000.0f, POSITION_PID,
-             2.0f, 0.15f, 0.0f);  // 顺序跑点可能需要更平滑的速度控制
-    pid_init(&sequence_angle_pid, 500, 15, 0.0f, 180.0f, POSITION_PID, 1.8f,
-             0.0f, 0.3f);
-    go_path_pidpoint_init(&sequence_speed_pid, &sequence_angle_pid, 2.0, 0.5,
-                          POINT_TYPE_X_Y_YAW_SEQUENCE, LOCATION_TYPE_ACTION);
 
     /* 默认挂起自动任务 */
     vTaskSuspend(chassis_auto_ctrl_task_handle);
