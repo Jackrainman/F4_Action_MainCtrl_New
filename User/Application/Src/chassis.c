@@ -14,6 +14,7 @@
 #include "go_path/go_path.h"
 #include "action_position/action_position.h"
 #include "logger/logger.h"
+#include "chassis_calculations/chassis_calculations.h"
 
 #define POS_NUM              5 /*!< 点位数量 */
 
@@ -47,6 +48,14 @@ chassis_state_t chassis_state = {
     .yaw_flag = true,
     .collimation_flag = false,
 };
+
+
+/* 统一存储经过计算后的速度数据，避免多任务数据竞争 */
+static struct {
+    float speed_x;   /* x方向速度 */
+    float speed_y;   /* y方向速度 */
+    float speed_yaw; /* yaw方向速度 */
+} chassis_computed;
 
 /* go_path中相关参数 */
 // pid_t nuc_flat_speed_pid;
@@ -401,6 +410,7 @@ void chassis_manual_ctrl_task(void *pvParametes) {
     float speedx = 0.0, speedy = 0.0, speedz = 0.0;
     pid_init(&orientation_angle_pid, 500, 8, 0.0f, 500.0f, POSITION_PID, 3.2f,
              0.1f, 2.0f);
+    chassis_speed_plan_init(CHASSIS_SPEED_PLAN_COSINE);
 
     int8_t sign = 0;
     remote_ctrl_data_t abs_g_remote_ctrl_data = {0};
@@ -432,6 +442,8 @@ void chassis_manual_ctrl_task(void *pvParametes) {
                 ? 0
                 : sign * (abs_g_remote_ctrl_data.rs[2] - 3) * 100;
 
+        chassis_speed_plan(speedx, speedy, speedz,
+                          &chassis_computed.speed_x, &chassis_computed.speed_y, &chassis_computed.speed_yaw);
         chassis_wheel_ctrl(speedx, speedy, speedz);
 
         vTaskDelay(1);
