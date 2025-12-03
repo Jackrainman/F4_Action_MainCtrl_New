@@ -84,7 +84,7 @@ enum {
 
 /* 固定点位+可变点位函数 */
 pos_node_t pos_array[POS_NUM + EX_NODE_NUM] = {
-    [0] = {-0.0f, 0.0f, 0 .0f, POINT_TYPE_NUC_FLAT},
+    [0] = {-0.0f, 0.0f, 0.0f, POINT_TYPE_NUC_FLAT},
     [1] = {4298.820f, -140.255f, 0.265f, POINT_TYPE_NUC_FLAT},
     [2] = {2960.288f, 3112.193f, 88.494f, POINT_TYPE_NUC_FLAT},
     [3] = {2494.616f, 5111.423f, 120.020f, POINT_TYPE_NUC_FLAT}, /*!< 点位信息 */
@@ -151,6 +151,7 @@ void chassis_set_manual_ctrl(void) {
     chassis_ctrl_queue_reset();
     chassis_ctrl_msg.event = CHASSIS_SET_MANUAL;
     chassis_ctrl_msg.timestap = HAL_GetTick();
+    chassis_speed_plan_init(CHASSIS_SPEED_PLAN_EASY);
     xQueueSend(chassis_ctrl_queue, &chassis_ctrl_msg, 5);
 #else
     vTaskSuspend(chassis_auto_ctrl_task_handle);
@@ -365,6 +366,7 @@ void chassis_ctrl_task(void *pvParametes) {
                 /* 底盘自动控制 */
                 sub_chassis_world_yaw(&g_action_pos_data.yaw);
                 vTaskSuspend(chassis_manual_ctrl_task_handle);
+                chassis_speed_plan_init(CHASSIS_SPEED_PLAN_EASY);
                 vTaskResume(chassis_auto_ctrl_task_handle);
             } break;
             case CHASSIS_SET_MANUAL: {
@@ -444,7 +446,7 @@ void chassis_manual_ctrl_task(void *pvParametes) {
 
         chassis_speed_plan(speedx, speedy, speedz,
                           &chassis_computed.speed_x, &chassis_computed.speed_y, &chassis_computed.speed_yaw);
-        chassis_wheel_ctrl(speedx, speedy, speedz);
+        chassis_wheel_ctrl(chassis_computed.speed_x, chassis_computed.speed_y, chassis_computed.speed_yaw);
 
         vTaskDelay(1);
     }
