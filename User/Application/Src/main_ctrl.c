@@ -105,7 +105,7 @@ void main_ctrl_task(void *pvParameters) {
                     break;
 
                 case MAIN_CTRL_POINT_RUN:                     //修改部分
-                    point_index = (point_index + 1) % 2;
+                    point_index = (point_index + 1) % 5;
                     chassis_state.point_index = point_index;  // 直接设置索引
                     chassis_set_ctrl(CHASSIS_SET_POINT);      // 触发跑点
                     break;

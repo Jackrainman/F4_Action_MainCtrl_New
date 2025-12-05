@@ -10,13 +10,13 @@
 #include "my_math/my_math.h"
 
 /* 全局变量定义 */
-#define MAX_ACCEL_X 40.0f  /* x方向最大加速度 */
-#define MAX_ACCEL_Y 40.0f  /* y方向最大加速度 */
-#define MAX_ACCEL_W 20.0f  /* 旋转最大角加速度 */
+#define MAX_ACCEL_X 20.0f  /* x方向最大加速度 */
+#define MAX_ACCEL_Y 20.0f  /* y方向最大加速度 */
+#define MAX_ACCEL_W 10.0f  /* 旋转最大角加速度 */
 
-#define BASE_SPEED_LIMIT 30.0f      /* 基础速度限制 */
-#define MAX_SPEED_LIMIT 40.0f       /* 最大速度限制 */
-#define THRESHOLD_SPEED 30.0f       /* 阈值速度 */
+#define BASE_SPEED_LIMIT 15.0f      /* 基础速度限制 */
+#define MAX_SPEED_LIMIT 20.0f       /* 最大速度限制 */
+#define THRESHOLD_SPEED 15.0f       /* 阈值速度 */
 
 /* 全局速度规划类型变量 */
 ChassisSpeedPlanType chassis_speed_plan_type;
