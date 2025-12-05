@@ -442,7 +442,7 @@ void chassis_manual_ctrl_task(void *pvParametes) {
                 ? constant_orientation_resolve(BASKET_POINT_X, BASKET_POINT_Y) * 12
             : abs_g_remote_ctrl_data.rs[2] < 3
                 ? 0
-                : sign * (abs_g_remote_ctrl_data.rs[2] - 3) * 100;
+                : sign * (abs_g_remote_ctrl_data.rs[2] - 3) * 200;
 
         chassis_speed_plan(speedx, speedy, speedz,
                           &chassis_computed.speed_x, &chassis_computed.speed_y, &chassis_computed.speed_yaw);

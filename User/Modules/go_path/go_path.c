@@ -244,6 +244,9 @@ go_path_arrive_status_t go_path_by_point(float target_x, float target_y,
     speedy = go_path_result.moving_velocity * sinf(go_path_result.speed_angle);
     speedw = go_path_result.turning_velocity;
 
+    if(speedw > 20) speedw += 240;
+    if(speedw < -20) speedw -= 240;
+    
     go_path_chassis_ctrl(speedx, speedy, speedw);
 
     return go_path_result.arrived;
