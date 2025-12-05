@@ -29,7 +29,7 @@ typedef enum {
 
 /* 点位类型 */
 typedef enum {
-    POINT_TYPE_NUC_FLAT = 0,
+    POINT_TYPE_ACTION_FLAT = 0,
     POINT_TYPE_DT35,
     POINT_TYPE_TARGET_RADIUM,
 

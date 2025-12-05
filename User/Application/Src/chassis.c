@@ -84,10 +84,10 @@ enum {
 
 /* 固定点位+可变点位函数 */
 pos_node_t pos_array[POS_NUM + EX_NODE_NUM] = {
-    [0] = {-0.0f, 0.0f, 0.0f, POINT_TYPE_NUC_FLAT},
-    [1] = {4298.820f, -140.255f, 0.265f, POINT_TYPE_NUC_FLAT},
-    [2] = {2960.288f, 3112.193f, 88.494f, POINT_TYPE_NUC_FLAT},
-    [3] = {2494.616f, 5111.423f, 120.020f, POINT_TYPE_NUC_FLAT}, /*!< 点位信息 */
+    [0] = {-0.0f, 0.0f, 0.0f, POINT_TYPE_ACTION_FLAT},
+    [1] = {4298.820f, -140.255f, 0.265f, POINT_TYPE_ACTION_FLAT},
+    [2] = {2960.288f, 3112.193f, 88.494f, POINT_TYPE_ACTION_FLAT},
+    [3] = {2494.616f, 5111.423f, 120.020f, POINT_TYPE_ACTION_FLAT}, /*!< 点位信息 */
 
     /* 可变点位信息 */
     [POS_NUM +
@@ -151,7 +151,6 @@ void chassis_set_manual_ctrl(void) {
     chassis_ctrl_queue_reset();
     chassis_ctrl_msg.event = CHASSIS_SET_MANUAL;
     chassis_ctrl_msg.timestap = HAL_GetTick();
-    chassis_speed_plan_init(CHASSIS_SPEED_PLAN_EASY);
     xQueueSend(chassis_ctrl_queue, &chassis_ctrl_msg, 5);
 #else
     vTaskSuspend(chassis_auto_ctrl_task_handle);
@@ -372,6 +371,7 @@ void chassis_ctrl_task(void *pvParametes) {
             case CHASSIS_SET_MANUAL: {
                 /* 底盘手控 */
                 vTaskSuspend(chassis_auto_ctrl_task_handle);
+                chassis_speed_plan_init(CHASSIS_SPEED_PLAN_COSINE);
                 vTaskResume(chassis_manual_ctrl_task_handle);
             } break;
             case CHASSIS_SET_HALT:
@@ -485,7 +485,7 @@ void chassis_auto_ctrl_task(void *pvParameters) {
     pid_init(&action_flat_angle_pid, 500, 15, 0.0f, 180.0f, POSITION_PID, 1.5f,
              0.01f, 0.5f);
     go_path_pidpoint_init(&action_flat_speed_pid, &action_flat_angle_pid, 20.0, 0.5,
-                          POINT_TYPE_NUC_FLAT, LOCATION_TYPE_ACTION);
+                          POINT_TYPE_ACTION_FLAT, LOCATION_TYPE_ACTION);
 
     /* 默认挂起自动任务 */
     vTaskSuspend(chassis_auto_ctrl_task_handle);
