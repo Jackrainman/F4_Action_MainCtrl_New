@@ -16,7 +16,7 @@
 #include "logger/logger.h"
 #include "chassis_calculations/chassis_calculations.h"
 
-#define POS_NUM              5 /*!< 点位数量 */
+#define POS_NUM              6 /*!< 点位数量 */
 
 /* 按键宏定义 */
 #define CHASSIS_AIMING_KEY   15  /*!< 底盘自瞄开启 */
@@ -84,10 +84,11 @@ enum {
 
 /* 固定点位+可变点位函数 */
 pos_node_t pos_array[POS_NUM + EX_NODE_NUM] = {
-    [0] = {-0.0f, 0.0f, 0.0f, POINT_TYPE_NUC_FLAT},
-    [1] = {4298.820f, -140.255f, 0.265f, POINT_TYPE_NUC_FLAT},
-    [2] = {2960.288f, 3112.193f, 88.494f, POINT_TYPE_NUC_FLAT},
-    [3] = {2494.616f, 5111.423f, 120.020f, POINT_TYPE_NUC_FLAT}, /*!< 点位信息 */
+    [0] = {0.0f, 0.0f, 0.0f, POINT_TYPE_NUC_FLAT},
+    [1] = {4911.820f, -96.255f, 0.265f, POINT_TYPE_NUC_FLAT},
+    [2] = {5245.288f, 6467.802f, 0.0f, POINT_TYPE_NUC_FLAT},
+    [3] = {471.081f, 6509.423f, 0.020f, POINT_TYPE_NUC_FLAT}, /*!< 点位信息 */
+    [4] = {134.288f, 128.072f, 0.020f, POINT_TYPE_NUC_FLAT},
 
     /* 可变点位信息 */
     [POS_NUM +
